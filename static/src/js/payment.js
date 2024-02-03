@@ -2,82 +2,96 @@
 
 import { Order } from "@point_of_sale/app/store/models";
 import { patch } from "@web/core/utils/patch";
+import { TicketScreen } from "@point_of_sale/app/screens/ticket_screen/ticket_screen";
 import { useService } from "@web/core/utils/hooks";
-import { PaymentScreen } from "@point_of_sale/app/screens/payment_screen/payment_screen";
+// import { PaymentScreen } from "@point_of_sale/app/screens/payment_screen/payment_screen";
+import { ReprintReceiptScreen } from "@point_of_sale/app/screens/receipt_screen/reprint_receipt_screen";
 
 
-import { _t } from "@web/core/l10n/translation";
-import { parseFloat } from "@web/views/fields/parsers";
-import { useErrorHandlers, useAsyncLockedMethod } from "@point_of_sale/app/utils/hooks";
-import { registry } from "@web/core/registry";
 
-import { ErrorPopup } from "@point_of_sale/app/errors/popups/error_popup";
-import { NumberPopup } from "@point_of_sale/app/utils/input_popups/number_popup";
-import { DatePickerPopup } from "@point_of_sale/app/utils/date_picker_popup/date_picker_popup";
-import { ConfirmPopup } from "@point_of_sale/app/utils/confirm_popup/confirm_popup";
-import { ConnectionLostError } from "@web/core/network/rpc_service";
+// patch(PaymentScreen.prototype, {
+//     setup() {
+//         super.setup();
+//         console.log("*Entre a setup() de PaymentScreen...");
+//     },
+//     async validateOrder(isForceValidate) {
+//         console.log("*validateOrder()");
+//         this.numberBuffer.capture();
+//         if (this.pos.config.cash_rounding) {
+//             if (!this.pos.get_order().check_paymentlines_rounding()) {
+//                 this.popup.add(ErrorPopup, {
+//                     title: _t("Rounding error in payment lines"),
+//                     body: _t(
+//                         "The amount of your payment lines must be rounded to validate the transaction."
+//                     ),
+//                 });
+//                 return;
+//             }
+//         }
+//         if (await this._isOrderValid(isForceValidate)) {
+//             // remove pending payments before finalizing the validation
+//             for (const line of this.paymentLines) {
+//                 if (!line.is_done()) {
+//                     this.currentOrder.remove_paymentline(line);
+//                 }
+//             }
+//             await this._finalizeValidation();
+//         }
+//     }
+// });
 
-import { PaymentScreenPaymentLines } from "@point_of_sale/app/screens/payment_screen/payment_lines/payment_lines";
-import { PaymentScreenStatus } from "@point_of_sale/app/screens/payment_screen/payment_status/payment_status";
-import { usePos } from "@point_of_sale/app/store/pos_hook";
-import { Component, useState, onMounted } from "@odoo/owl";
-import { Numpad } from "@point_of_sale/app/generic_components/numpad/numpad";
-import { floatIsZero } from "@web/core/utils/numbers";
-import { OrderReceipt } from "@point_of_sale/app/screens/receipt_screen/receipt/order_receipt";
 
-patch(PaymentScreen.prototype, {
-    setup() {
+patch(ReprintReceiptScreen.prototype, {
+    async setup() {
         super.setup();
-        console.log("*Entre a setup() de PaymentScreen...");
-    },
-    async validateOrder(isForceValidate) {
-        console.log("*validateOrder()");
-        this.numberBuffer.capture();
-        if (this.pos.config.cash_rounding) {
-            if (!this.pos.get_order().check_paymentlines_rounding()) {
-                this.popup.add(ErrorPopup, {
-                    title: _t("Rounding error in payment lines"),
-                    body: _t(
-                        "The amount of your payment lines must be rounded to validate the transaction."
-                    ),
-                });
-                return;
-            }
-        }
-        if (await this._isOrderValid(isForceValidate)) {
-            // remove pending payments before finalizing the validation
-            for (const line of this.paymentLines) {
-                if (!line.is_done()) {
-                    this.currentOrder.remove_paymentline(line);
-                }
-            }
-            await this._finalizeValidation();
-        }
+        this.orm = useService('orm');
+
+        var account_move_id = this.props.order.account_move;
+        console.log("*account_move_id: ", account_move_id);
+
+        const invoice_query = await this.orm.call('account.move', 'search_read', [
+            [
+              ['id', '=', account_move_id],
+            ],
+            []
+          ]);
+        const invoice_data = invoice_query[0];
+        console.log("*invoice_data: ", invoice_data);
+
+        const SelectedOrder = this.pos.get_order();
+        SelectedOrder.cufe_fel = invoice_data.cufe_fel;
     }
 });
 
-/*patch(Order.prototype, {
-    setup(_defaultObj, options) {
-        super.setup(...arguments);
-        this.orm = useService("orm");
-        this.rpc = this.env.services.rpc;
-    },
+
+patch(Order.prototype, {
     export_for_printing() {
-        const result = super.export_for_printing(...arguments);
-        result.invoice_data = "XXXXXX";
-        this.get_invoice_data();
-        return result;
+        return {
+            ...super.export_for_printing(...arguments),
+            invoice_data: this.pos.selectedOrder.invoice_data,
+            cufe_fel: this.pos.selectedOrder.cufe_fel,
+        };
     },
-    async get_invoice_data() {
-        // var rpc = this.pos.orm.rpc;
-        // const user_name = await this.rpc({
-        //     model: "res.users",
-        //     method: "read",
-        //     args: [[], ["name"]],
-        //   });
-        console.log("*this.rpc: ", this.rpc);
-    }
-});*/
+});
+
+
+
+// patch(Order.prototype, {
+//     setup(_defaultObj, options) {
+//         super.setup(...arguments);
+        
+//     },
+//     export_for_printing() {
+//         const result = super.export_for_printing(...arguments);
+//         result.invoice_data = "XXXXXX";
+//         this.get_invoice_data();
+//         return result;
+//     },
+//     async get_invoice_data() {
+//         const resPartner = await this.orm.call('res.partner','search_read',[[]]);
+//         console.log("*resPartner ORDER: ", resPartner);
+//     }
+// });
 
 
 

@@ -26,15 +26,15 @@ class PosOrder(models.Model):
         new_move.crear_folio_fel()
         return new_move
     
-    # def _export_for_ui(self, order):
-    #     vals = super(PosOrder, self)._export_for_ui(order)
-    #     _logger.info(f"*__export_for_ui: {vals}")
-    #     vals['test'] = "ESTE ES UN TEST"
-    #     return vals
-    
-    @api.model
-    def _order_fields(self, ui_order):
-        vals = super(PosOrder, self)._order_fields(ui_order)
+    def _export_for_ui(self, order):
+        vals = super(PosOrder, self)._export_for_ui(order)
         vals['test'] = "ESTE ES UN TEST"
-        _logger.info(f"*_order_fields: {vals}")
+        _logger.info(f"*__export_for_ui: {vals}")
         return vals
+    
+    # @api.model
+    # def _order_fields(self, ui_order):
+    #     vals = super(PosOrder, self)._order_fields(ui_order)
+    #     vals['test'] = "ESTE ES UN TEST"
+    #     _logger.info(f"*_order_fields: {vals}")
+    #     return vals
