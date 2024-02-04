@@ -18,17 +18,13 @@ Módulo de facturación electrónica para Panamá POS. Desarrollado por Mentor K
     'depends': ['base','mkl_felpanama','point_of_sale'],
 
     'data': [
-        # 'security/ir.model.access.csv',
-        # 'views/views.xml',
-        # 'views/templates.xml',
+        'views/pos_config.xml',
     ],
     'assets': {
         'point_of_sale._assets_pos': [
             'mkl_felpanama_pos/static/src/xml/OrderReceipt/OrderReceipt.xml',
-            'mkl_felpanama_pos/static/src/js/payment.js'
-        ],
-        "web.assets_frontend": [
-            
+            'mkl_felpanama_pos/static/src/js/payment.js',
+            'mkl_felpanama_pos/static/src/js/models.js'
         ]
     }
 }
