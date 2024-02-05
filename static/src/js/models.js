@@ -4,7 +4,6 @@ import { Order, Orderline, Payment } from "@point_of_sale/app/store/models";
 import { patch } from "@web/core/utils/patch";
 
 patch(Order.prototype, {
-
     setup() {
         super.setup(...arguments);
         var default_customer = this.pos.config.res_partner_id;
@@ -14,7 +13,5 @@ patch(Order.prototype, {
         } else{
             this.set_partner(null);
         }
-        
-    },
-    
+    }
 });
