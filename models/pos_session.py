@@ -36,5 +36,4 @@ class PosSession(models.Model):
         models_to_load = super(PosSession, self)._pos_ui_models_to_load()
         models_to_load.append('dgi.tipo.ruc')
         models_to_load.append('dgi.tipo.receptor')
-        # _logger.info(f"*POST models_to_load: {models_to_load}")
         return models_to_load

@@ -16,7 +16,6 @@ patch(PartnerDetailsEdit.prototype, {
         this.pos = usePos();
         this.intFields = ["country_id", "state_id", "property_product_pricelist", "tipo_ruc", "tipo_receptor"];
         const partner = this.props.partner;
-        console.log("*partner", partner);
         this.changes = useState({
             name: partner.name || "",
             street: partner.street || "",
@@ -35,8 +34,6 @@ patch(PartnerDetailsEdit.prototype, {
             tipo_receptor: partner.tipo_receptor[0],
             property_product_pricelist: this.setDefaultPricelist(partner),
         });
-
-        console.log("*this.changes", this.changes);
 
         Object.assign(this.props.imperativeHandle, {
             save: () => this.saveChanges(),
