@@ -18,3 +18,18 @@ class PosSession(models.Model):
                 ],
             },
         }
+        
+    def _loader_params_dgi_tipo_ruc(self):
+        return {'search_params': {'domain': [], 'fields': ['name', 'codigo']}}
+
+    def _get_pos_ui_dgi_tipo_ruc(self, params):
+        return self.env['dgi.tipo.ruc'].search_read(**params['search_params'])
+        
+    @api.model
+    def _pos_ui_models_to_load(self):
+        models_to_load = super(PosSession, self)._pos_ui_models_to_load()
+        _logger.info(f"*PRE models_to_load: {models_to_load}")
+        # models_to_load.append('dgi.tipo.ruc')
+        models_to_load.append('dgi.tipo.ruc')
+        _logger.info(f"*POST models_to_load: {models_to_load}")
+        return models_to_load

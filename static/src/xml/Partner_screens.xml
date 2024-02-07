@@ -12,9 +12,10 @@
             <div class="partner-detail col">
                 <label class="form-label label" for="tipo_ruc">Tipo de RUC</label>
                 <select class="detail form-select" id="tipo_ruc" name="tipo_ruc" t-model="changes.tipo_ruc" t-att="{'disabled': isFieldCommercialAndPartnerIsChild('tipo_ruc')}" t-att-class="{'border-danger': missingFields.includes('tipo_ruc')}">
-                    <t t-foreach="pos.langs" t-as="lang" t-key="lang.id">
-                        <option t-att-value="lang.code" t-att-selected="changes.lang ? ((lang.code === changes.lang) ? true : undefined) : lang.code === pos.user.lang? true : undefined">
-                            <t t-esc="lang.name" />
+                    <option value="">None</option>
+                    <t t-foreach="pos.tipos_ruc" t-as="tipo_ruc" t-key="tipo_ruc.id">
+                        <option t-att-value="tipo_ruc.id">
+                            <t t-esc="tipo_ruc.name" />
                         </option>
                     </t>
                 </select>

@@ -14,10 +14,9 @@ patch(PartnerDetailsEdit.prototype, {
     setup() {
         this.popup = useService("popup");
         this.pos = usePos();
-        this.intFields = ["country_id", "state_id", "property_product_pricelist"];
+        this.intFields = ["country_id", "state_id", "property_product_pricelist", "tipo_ruc"];
         const partner = this.props.partner;
         console.log("*partner", partner);
-        console.log("*partner.dv:", partner.dv);
         this.changes = useState({
             name: partner.name || "",
             street: partner.street || "",
@@ -32,8 +31,12 @@ patch(PartnerDetailsEdit.prototype, {
             barcode: partner.barcode || "",
             vat: partner.vat || "",
             dv: partner.dv || "",
+            tipo_ruc: partner.tipo_ruc[0],
             property_product_pricelist: this.setDefaultPricelist(partner),
         });
+
+        console.log("*this.changes", this.changes);
+
         Object.assign(this.props.imperativeHandle, {
             save: () => this.saveChanges(),
         });
