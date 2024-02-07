@@ -8,6 +8,7 @@ patch(PosStore.prototype, {
     async _processData(loadedData) {
         await super._processData(...arguments);
         this.tipos_ruc = loadedData["dgi.tipo.ruc"];
+        this.tipos_receptor = loadedData["dgi.tipo.receptor"];
         console.log("*this.tipos_ruc: ", this.tipos_ruc);
     }
 });

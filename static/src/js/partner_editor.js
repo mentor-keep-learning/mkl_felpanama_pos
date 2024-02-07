@@ -14,7 +14,7 @@ patch(PartnerDetailsEdit.prototype, {
     setup() {
         this.popup = useService("popup");
         this.pos = usePos();
-        this.intFields = ["country_id", "state_id", "property_product_pricelist", "tipo_ruc"];
+        this.intFields = ["country_id", "state_id", "property_product_pricelist", "tipo_ruc", "tipo_receptor"];
         const partner = this.props.partner;
         console.log("*partner", partner);
         this.changes = useState({
@@ -32,6 +32,7 @@ patch(PartnerDetailsEdit.prototype, {
             vat: partner.vat || "",
             dv: partner.dv || "",
             tipo_ruc: partner.tipo_ruc[0],
+            tipo_receptor: partner.tipo_receptor[0],
             property_product_pricelist: this.setDefaultPricelist(partner),
         });
 

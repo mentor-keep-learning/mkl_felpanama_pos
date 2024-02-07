@@ -20,6 +20,17 @@
                     </t>
                 </select>
             </div>
+            <div class="partner-detail col">
+                <label class="form-label label" for="tipo_receptor">Tipo de receptor (FEL)</label>
+                <select class="detail form-select" id="tipo_receptor" name="tipo_receptor" t-model="changes.tipo_receptor" t-att="{'disabled': isFieldCommercialAndPartnerIsChild('tipo_receptor')}" t-att-class="{'border-danger': missingFields.includes('tipo_receptor')}">
+                    <option value="">None</option>
+                    <t t-foreach="pos.tipos_receptor" t-as="tipo_receptor" t-key="tipo_receptor.id">
+                        <option t-att-value="tipo_receptor.id">
+                            <t t-esc="tipo_receptor.name" />
+                        </option>
+                    </t>
+                </select>
+            </div>
         </xpath>
     </t>
 </templates>
