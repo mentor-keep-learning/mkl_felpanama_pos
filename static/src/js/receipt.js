@@ -9,7 +9,7 @@ import { ReceiptScreen } from "@point_of_sale/app/screens/receipt_screen/receipt
 import { ReprintReceiptScreen } from "@point_of_sale/app/screens/receipt_screen/reprint_receipt_screen";
 import { useRef, useState, onWillStart, Component } from "@odoo/owl";
 import { usePos } from "@point_of_sale/app/store/pos_hook";
-
+import { session } from "@web/session";
 
 patch(ReceiptScreen.prototype, {
     setup() {
@@ -27,6 +27,8 @@ patch(ReceiptScreen.prototype, {
         this.orderUiState = this.currentOrder.uiState.ReceiptScreen;
         this.orderUiState.inputEmail =
             this.orderUiState.inputEmail || (partner && partner.email) || "";
+        
+        const baseUrl = session.base_url;
 
         onWillStart(async () => {
             // When the order is paid, if there is still a part of the order
@@ -69,7 +71,7 @@ patch(ReceiptScreen.prototype, {
                         const invoice_data = invoice_query[0];
                         const SelectedOrder = this.pos.get_order();
                         SelectedOrder.cufe_fel = invoice_data.cufe_fel;
-                        SelectedOrder.qr_fel = 'https://panama.mentorconsultoria.com/report/barcode/?barcode_type=QR&value=' + invoice_data.qr_fel;
+                        SelectedOrder.qr_fel = baseUrl + '/report/barcode/?barcode_type=QR&value=' + invoice_data.qr_fel;
                         SelectedOrder.qr_html = invoice_data.qr_html;
                         SelectedOrder.nro_protocolo_autorizacion_fel = invoice_data.nro_protocolo_autorizacion_fel;
                         SelectedOrder.fecha_recepcion_dgi_fel = invoice_data.fecha_recepcion_dgi_fel;
@@ -87,6 +89,8 @@ patch(ReprintReceiptScreen.prototype, {
     async setup() {
         super.setup();
         this.orm = useService('orm');
+
+        const baseUrl = session.base_url;
 
         var account_move_id = this.props.order.account_move;
         //************** Factuacion Electrónica **************/
@@ -107,7 +111,7 @@ patch(ReprintReceiptScreen.prototype, {
             const invoice_data = invoice_query[0];
             const SelectedOrder = this.pos.get_order();
             SelectedOrder.cufe_fel = invoice_data.cufe_fel;
-            SelectedOrder.qr_fel = 'https://panama.mentorconsultoria.com/report/barcode/?barcode_type=QR&value=' + invoice_data.qr_fel;
+            SelectedOrder.qr_fel = baseUrl + '/report/barcode/?barcode_type=QR&value=' + invoice_data.qr_fel;
             SelectedOrder.qr_html = invoice_data.qr_html;
             SelectedOrder.nro_protocolo_autorizacion_fel = invoice_data.nro_protocolo_autorizacion_fel;
             SelectedOrder.fecha_recepcion_dgi_fel = invoice_data.fecha_recepcion_dgi_fel;

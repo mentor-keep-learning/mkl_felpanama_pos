@@ -26,5 +26,5 @@ class PosOrder(models.Model):
         doc_type_fel = self.env['dgi.tipo.documento'].sudo().search([('codigo','=',codigo_doc)],limit=1)
         move_vals['tipo_documento_fel'] = doc_type_fel.id
         new_move = super(PosOrder, self)._create_invoice(move_vals)
-        new_move.crear_folio_fel()
+        # new_move.crear_folio_fel()
         return new_move
