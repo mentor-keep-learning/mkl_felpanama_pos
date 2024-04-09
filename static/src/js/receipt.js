@@ -28,7 +28,7 @@ patch(ReceiptScreen.prototype, {
         this.orderUiState.inputEmail =
             this.orderUiState.inputEmail || (partner && partner.email) || "";
         
-        const baseUrl = session.base_url;
+        const baseUrl = session["web.base.url"];
 
         onWillStart(async () => {
             // When the order is paid, if there is still a part of the order
